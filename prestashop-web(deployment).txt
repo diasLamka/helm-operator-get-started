@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: prestashop-web
+  name: prestashop-web
+  namespace: project-prestashop
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prestashop-web
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: prestashop-web
+    spec:
+      containers:
+      - image: bitnami/prestashop:1.6.1.9-r5
+        name: prestashop
+     env:
+      - name: PRESTASHOP_DATABASE_USER
+           valueFrom:
+           secret:
+            name: prestashop-secret
+            key: PRESTASHOP_DATABASE_USER
+      - name: PRESTASHOP_DATABASE_PASSWORD
+              valueFrom:
+                secret:
+                  name: prestashop-secret
+                  key: PRESTASHOP_DATABASE_PASSWORD
+      - name: PRESTASHOP_DATABASE_NAME
+              valueFrom:
+                secret:
+                  name: prestashop-secret
+                  key: PRESTASHOP_DATABASE_NAME
+                   
+      - name: PRESTASHOP_FIRST_NAME
+             valueFrom:
+             configMap:
+              name: prestashop-configmap
+              key: PRESTASHOP_FIRST_NAME
+      - name: PRESTASHOP_LAST_NAME
+             valueFrom:
+             configMap:
+              name: prestashop-configmap
+              key: PRESTASHOP_LAST_NAME
+              
+      volumeMounts:
+            - name: prestashop-vol
+              mountPath: /etc/data
+      volumes:
+        - name: prestashop-vol
+          persistentVolumeClaim:
+            claimName: prestashop-pvc
+        resources: {}
+status: {}
+
+

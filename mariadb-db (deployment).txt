@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: mariadb-db
+  name: mariadb-db
+  namespace: project-prestashop
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mariadb-db
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: mariadb-db
+    spec:
+      containers:
+      - image: bitnami/mariadb:10.1
+        name: mariadb
+        resources: {}
+status: {}
+
+
